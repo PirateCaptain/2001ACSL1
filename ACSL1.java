@@ -1,6 +1,5 @@
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.Scanner;
-import java.util.Map;
 
 
 public class ACSL1 {
@@ -13,68 +12,96 @@ public class ACSL1 {
 	private static void go() {
 		//declarations:
 		String toPrint = "";
-		String currentLetter = "A";
+		int currentLetterValue = 1;
 		int numToMove = 0;
-		HashMap<String, Integer> lettersToNumbers = new HashMap<String, Integer>() {{ put("A", 1); put("B", 2); put("C", 3); put("D", 4); put("E", 5); put("F", 6); put("G", 7); put("H", 8); put("I", 9); put("J", 10); put("K", 11); put("L", 12); put("M", 13); put("N", 14); put("O", 15); put("P", 16); put("Q", 17); put("R", 18); put("S", 19); put("T", 20); put("U", 21); put("V", 22); put("W", 23); put("X", 24); put("Y", 25); put("Z", 26);}};
+		AlphabetHelper aHelper = new AlphabetHelper();
 
 		Scanner scan = new Scanner(System.in);
 		String s = scan.next();
 		String[] data = s.split("");
-		for (int i = 0; i<data.length; i+=2) {
+		//System.err.println(Arrays.toString(data));
+		for (int i = 1; i<data.length; i+=2) {
 			if (data[i].equals("$")) {//print output and reset for next line
 				System.out.println(toPrint);
 				toPrint = "";
-				currentLetter = "A";
+				currentLetterValue = 1;
 			}
 			else {
 				String st = data[i];
 				int in = Integer.valueOf(data[i+1]);
 				switch (in) {
-				case 1:	numToMove = rule1(st);
-					break;
-				case 2: numToMove = rule2(st);
-					break;
-				case 3: numToMove = rule3(st);
-					break;
-				case 4: numToMove = rule4(st);
-					break;
-				case 5: numToMove = rule5(st);
-					break;
-				case 6: numToMove = rule6(st);
-					break;
+				case 1:	numToMove = rule1(st, aHelper);
+				//System.err.println(numToMove);
+				break;
+				case 2: numToMove = rule2(st, aHelper);
+				//System.err.println(numToMove);
+				break;
+				case 3: numToMove = rule3(st, aHelper);
+				//System.err.println(numToMove);
+				break;
+				case 4: numToMove = rule4(st, aHelper);
+				break;
+				case 5: numToMove = rule5(st, aHelper);
+				break;
+				case 6: numToMove = rule6(st, aHelper);
+				break;
 				}
+			}
+			String letter = travel(numToMove%26, currentLetterValue, aHelper);
+			toPrint += letter;
+			currentLetterValue = aHelper.getNumber(letter);
+			//toPrint += travel(numToMove%26, currentLetterValue, aHelper);
+			//currentLetterValue =
+		}
+	}
+
+	private static String travel(int numToMove, int currentLetterValue, AlphabetHelper aHelper) {
+		if (numToMove >= 0) {
+			int distToEnd = 26 - currentLetterValue;
+			if (distToEnd >= numToMove) {
+				return aHelper.getLetter(currentLetterValue+numToMove);
+			}
+			else {
+				return aHelper.getLetter(numToMove-distToEnd);
+			}
+		}
+		else {
+			int distToStart = currentLetterValue;
+			if (distToStart >= numToMove) {
+				return aHelper.getLetter(currentLetterValue-numToMove);
+			}
+			else {
+				return aHelper.getLetter(26-numToMove);
 			}
 		}
 	}
 
-	private static int rule6(String st) {
+	private static int rule6(String st, AlphabetHelper aHelper) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	private static int rule5(String st) {
+	private static int rule5(String st, AlphabetHelper aHelper) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	private static int rule4(String st) {
+	private static int rule4(String st, AlphabetHelper aHelper) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	private static int rule3(String st) {
-		// TODO Auto-generated method stub
-		return 0;
+	private static int rule3(String st, AlphabetHelper aHelper) {
+		return Integer.valueOf(aHelper.getNumber(st)/4) * -8;
 	}
 
-	private static int rule2(String st) {
-		// TODO Auto-generated method stub
-		return 0;
+	private static int rule2(String st, AlphabetHelper aHelper) {
+		return (aHelper.getNumber(st)%3)*5;
+
 	}
 
-	private static int rule1(String st) {
-		
-		return 0;
+	private static int rule1(String st, AlphabetHelper aHelper) {
+		return aHelper.getNumber(st)*2;
 	}
 
 
