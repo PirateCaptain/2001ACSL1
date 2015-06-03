@@ -6,6 +6,7 @@ public class ACSL1 {
 	public static void main (String[] args) {
 		//System.out.println(2%3);
 		//System.out.println(Integer.valueOf(6/4));
+
 		go();
 	}
 
@@ -47,12 +48,11 @@ public class ACSL1 {
 					break;
 					case 5: numToMove = rule5(st, aHelper);
 					break;
-					case 6: numToMove = rule6(st, aHelper);
-					break;
 					}
 				}
 				String letter = travel(numToMove%26, currentLetterValue, aHelper);
 				toPrint += letter;
+				//System.err.println("letter: "+letter);
 				currentLetterValue = aHelper.getNumber(letter);
 				//toPrint += travel(numToMove%26, currentLetterValue, aHelper);
 				//currentLetterValue =
@@ -74,29 +74,24 @@ public class ACSL1 {
 		else {
 			//System.err.println("negative motion loop");
 			int distToStart = currentLetterValue;
-			if (distToStart >= numToMove) {
+			if (distToStart <= numToMove) {
 				//System.err.println("no wraparound");
 				return aHelper.getLetter(currentLetterValue+numToMove);
 			}
 			else {
-				return aHelper.getLetter(26-numToMove);
+				//System.err.println("in negative loopback");
+				return aHelper.getLetter(26+numToMove);
 			}
 		}
 	}
-
-	private static int rule6(String st, AlphabetHelper aHelper) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 	private static int rule5(String st, AlphabetHelper aHelper) {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	private static int rule4(String st, AlphabetHelper aHelper) {
-		// TODO Auto-generated method stub
-		return 0;
+		//System.err.println("rule4 method returning: " + (Integer.valueOf((int) Math.sqrt(aHelper.getNumber(st))))*-12);
+		return  (Integer.valueOf((int) Math.sqrt(aHelper.getNumber(st))))*-12;
 	}
 
 	private static int rule3(String st, AlphabetHelper aHelper) {
@@ -111,6 +106,4 @@ public class ACSL1 {
 	private static int rule1(String st, AlphabetHelper aHelper) {
 		return aHelper.getNumber(st)*2;
 	}
-
-
 }
