@@ -17,45 +17,51 @@ public class ACSL1 {
 		AlphabetHelper aHelper = new AlphabetHelper();
 
 		Scanner scan = new Scanner(System.in);
-		String s = scan.next();
-		String[] data = s.split("");
-		//System.err.println(Arrays.toString(data));
-		for (int i = 1; i<data.length; i+=2) {
-			if (data[i].equals("$")) {//print output and reset for next line
-				System.out.println(toPrint);
-				toPrint = "";
-				currentLetterValue = 1;
-			}
-			else {
-				String st = data[i];
-				int in = Integer.valueOf(data[i+1]);
-				switch (in) {
-				case 1:	numToMove = rule1(st, aHelper);
-				//System.err.println(numToMove);
-				break;
-				case 2: numToMove = rule2(st, aHelper);
-				//System.err.println(numToMove);
-				break;
-				case 3: numToMove = rule3(st, aHelper);
-				//System.err.println(numToMove);
-				break;
-				case 4: numToMove = rule4(st, aHelper);
-				break;
-				case 5: numToMove = rule5(st, aHelper);
-				break;
-				case 6: numToMove = rule6(st, aHelper);
-				break;
+		while(true){ 
+			String s = scan.next();
+
+			String[] data = s.split("");
+			//System.err.println(Arrays.toString(data));
+			for (int i = 1; i<data.length; i+=2) {
+				if (data[i].equals("$")) {//print output and reset for next line
+					System.out.println(toPrint);
+					toPrint = "";
+					currentLetterValue = 1;
+					break;
 				}
+				else {
+					String st = data[i];
+					int in = Integer.valueOf(data[i+1]);
+					switch (in) {
+					case 1:	numToMove = rule1(st, aHelper);
+					//System.err.println(numToMove);
+					break;
+					case 2: numToMove = rule2(st, aHelper);
+					//System.err.println(numToMove);
+					break;
+					case 3: numToMove = rule3(st, aHelper);
+					//System.err.println("case 3 called: " + numToMove);
+					//System.err.println(-8%26);
+					break;
+					case 4: numToMove = rule4(st, aHelper);
+					break;
+					case 5: numToMove = rule5(st, aHelper);
+					break;
+					case 6: numToMove = rule6(st, aHelper);
+					break;
+					}
+				}
+				String letter = travel(numToMove%26, currentLetterValue, aHelper);
+				toPrint += letter;
+				currentLetterValue = aHelper.getNumber(letter);
+				//toPrint += travel(numToMove%26, currentLetterValue, aHelper);
+				//currentLetterValue =
 			}
-			String letter = travel(numToMove%26, currentLetterValue, aHelper);
-			toPrint += letter;
-			currentLetterValue = aHelper.getNumber(letter);
-			//toPrint += travel(numToMove%26, currentLetterValue, aHelper);
-			//currentLetterValue =
 		}
 	}
 
 	private static String travel(int numToMove, int currentLetterValue, AlphabetHelper aHelper) {
+		//System.err.println("numToMove: " +numToMove + " currentLetterValue: " + currentLetterValue);
 		if (numToMove >= 0) {
 			int distToEnd = 26 - currentLetterValue;
 			if (distToEnd >= numToMove) {
@@ -66,9 +72,11 @@ public class ACSL1 {
 			}
 		}
 		else {
+			//System.err.println("negative motion loop");
 			int distToStart = currentLetterValue;
 			if (distToStart >= numToMove) {
-				return aHelper.getLetter(currentLetterValue-numToMove);
+				//System.err.println("no wraparound");
+				return aHelper.getLetter(currentLetterValue+numToMove);
 			}
 			else {
 				return aHelper.getLetter(26-numToMove);
